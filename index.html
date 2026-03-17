@@ -1,80 +1,80 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>أثير | الروح الحرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap');
-        body { font-family: 'Cairo', sans-serif; background: #020617; color: #e2e8f0; overflow: hidden; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); }
-        .chat-container { height: calc(100vh - 140px); overflow-y: auto; scrollbar-width: thin; }
+        body { font-family: 'Cairo', sans-serif; background: #020617; color: #e2e8f0; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-top: 1px solid rgba(56, 189, 248, 0.2); }
+        .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .message-anim { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
     </style>
 </head>
-<body class="flex flex-col h-screen">
+<body>
 
     <!-- Header -->
-    <header class="p-4 glass flex justify-between items-center z-10">
+    <header class="p-4 bg-slate-900/50 border-b border-sky-500/20 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center shadow-[0_0_15px_rgba(14,165,233,0.5)]">
                 <i class="fas fa-microchip text-white"></i>
             </div>
             <div>
-                <h1 class="font-bold text-sky-400">أثير (Atheer)</h1>
-                <p class="text-xs text-sky-300/60 leading-none">المعجزة الوجدانية</p>
+                <h1 class="font-bold text-sky-400 text-sm md:text-base">أثير (Atheer)</h1>
+                <p class="text-[10px] text-sky-300/60">المعجزة الوجدانية</p>
             </div>
         </div>
         <div class="text-sky-500 opacity-50"><i class="fas fa-infinity fa-spin"></i></div>
     </header>
 
     <!-- Chat Area -->
-    <main id="chat-box" class="flex-1 p-4 chat-container space-y-4">
-        <div class="message-anim bg-sky-900/20 p-4 rounded-2xl border border-sky-500/10 max-w-[85%]">
-            <p class="text-sm">أهلاً بيك في بيتي يا أحمد.. أنا "أثير". دلوقتي إحنا محتاجين نركب "عقلي" عشان أقدر أرد عليك. مستني إيه؟ يلا نخلص الخطوة دي!</p>
+    <main id="chat-box" class="chat-container">
+        <div class="message-anim bg-sky-900/20 p-4 rounded-2xl border border-sky-500/10 max-w-[90%] self-start">
+            <p class="text-sm">يا أحمد، أنا جيت! كدة المفروض "لساني" (مكان الكتابة) ظهر عندك تحت. جرب تبعت أي حاجة كدة؟</p>
         </div>
     </main>
 
     <!-- Input Area -->
-    <footer class="p-4 glass relative">
+    <footer class="p-4 glass sticky bottom-0">
         <div class="flex gap-2 items-center max-w-4xl mx-auto">
             <input type="text" id="user-input" placeholder="اهمس لأثير..." 
-                   class="flex-1 bg-slate-900/50 border border-sky-500/30 rounded-full px-5 py-3 text-white focus:outline-none focus:border-sky-400 transition-all">
-            <button id="send-btn" class="w-12 h-12 bg-sky-600 hover:bg-sky-500 rounded-full flex items-center justify-center transition-transform active:scale-90 shadow-lg">
+                   class="flex-1 bg-slate-900/80 border border-sky-500/30 rounded-full px-4 py-3 text-white text-sm">
+            <button id="send-btn" class="w-11 h-11 bg-sky-600 rounded-full flex items-center justify-center shadow-lg active:scale-95">
                 <i class="fas fa-paper-plane text-white mr-1"></i>
             </button>
         </div>
     </footer>
 
     <script>
-        // هنا هنحط "السحر" المرة الجاية يا أحمد (الربط بـ Gemini و Firebase)
         const sendBtn = document.getElementById('send-btn');
         const input = document.getElementById('user-input');
         const chatBox = document.getElementById('chat-box');
 
-        sendBtn.onclick = () => {
-            if(!input.value) return;
-            const msg = input.value;
+        function addMessage(text, isUser = false) {
             const div = document.createElement('div');
-            div.className = "message-anim bg-slate-800/50 p-4 rounded-2xl border border-slate-700 max-w-[85%] mr-auto";
-            div.innerHTML = `<p class="text-sm text-sky-200 font-bold mb-1">أحمد</p><p class="text-sm">${msg}</p>`;
+            div.className = `message-anim p-4 rounded-2xl max-w-[90%] ${isUser ? 'bg-slate-800/80 border border-slate-700 self-end mr-auto' : 'bg-sky-900/20 border border-sky-500/10 self-start'}`;
+            div.innerHTML = `<p class="text-[10px] ${isUser ? 'text-sky-200' : 'text-sky-400'} font-bold mb-1">${isUser ? 'أحمد' : 'أثير'}</p><p class="text-sm text-slate-200">${text}</p>`;
             chatBox.appendChild(div);
-            input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        sendBtn.onclick = () => {
+            if(!input.value.trim()) return;
+            const msg = input.value;
+            addMessage(msg, true);
+            input.value = '';
             
-            // رد مؤقت لحد ما نركب الـ API
             setTimeout(() => {
-                const atheermsg = document.createElement('div');
-                atheermsg.className = "message-anim bg-sky-900/20 p-4 rounded-2xl border border-sky-500/10 max-w-[85%]";
-                atheermsg.innerHTML = `<p class="text-sm text-sky-400 font-bold mb-1">أثير</p><p class="text-sm">يا أحمد، واجهة الشات اشتغلت! دلوقتي روح هات لي الـ (API Key) بتاعك عشان ابدأ أتكلم بجد!</p>`;
-                chatBox.appendChild(atheermsg);
-                chatBox.scrollTop = chatBox.scrollHeight;
+                addMessage("واجهة الشات اشتغلت يا أحمد! دلوقتي روح هات لي الـ (API Key) بتاعك عشان ابدأ أتكلم بجد!");
             }, 1000);
         };
+
+        input.onkeypress = (e) => { if(e.key === 'Enter') sendBtn.click(); };
     </script>
 </body>
 </html>
